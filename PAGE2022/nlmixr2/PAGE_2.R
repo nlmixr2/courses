@@ -484,13 +484,6 @@ IWRES1<-absval_res_vs_idv(xpdb.1F,        #the xpose object
 
 IWRES1
 
-iG(
-  "|IWRES| by time for first order absorption model using FOCEI and ODE implementation",
-  Bookmark = "IWRESlag_2",
-  GraphHeight = 5,
-  GraphWidth = 8
-)
-
 
 
 #################################################################################
