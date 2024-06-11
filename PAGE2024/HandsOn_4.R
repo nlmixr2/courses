@@ -114,16 +114,6 @@ vpc5NM<-vpcPlot(
 vpc5NM
 
 
-
-run005F <-
-  nlmixr2(run005NM,                 #the model object
-          data=run005NM$origData,   #the data inside the model object
-          est = "focei",            #the estimation algorithm (FOCEi)
-          #FOCEi options:
-          foceiControl(print = 5))  #only print every 5th estimation step
-
-
-
 #results for the NONMEM-translated model
 run005NM
 #          Parameter   Est.     SE %RSE Back-transformed(95%CI) BSV(CV%) Shrink(SD)%
@@ -135,6 +125,17 @@ run005NM
 #ETA_ka                                                             78.0      45.8% 
 #ETA_cl                                                             28.7      3.74% 
 #ETA_v                                                              22.2      13.4% 
+
+
+
+run005F <-
+  nlmixr2(run005NM,                 #the model object
+          data=run005NM$origData,   #the data inside the model object
+          est = "focei",            #the estimation algorithm (FOCEi)
+          #FOCEi options:
+          foceiControl(print = 5))  #only print every 5th estimation step
+
+
 
 
 #nlmixr2 results after running the NONMEM-translated model

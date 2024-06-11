@@ -142,7 +142,7 @@ run006F <-
   nlmixr2(KAtr1_sexV, PKdata, est = "focei", foceiControl(print = 20))
 run006F
 save(run006F, file = "run006F.Rdata")
-#load(file = "fitKAtr1_sexV_F.Rdata")
+#load(file = "run006F.Rdata")
 
 
 ## binary categorical effects estimated on log scale can be back-transformed
@@ -232,8 +232,8 @@ save(run007F, file = "run007F.Rdata")
 
 ## do you get a significant drop in OFV by including allometric weight?
 load(file="run003F.Rdata")
-run007FF$OBJF-run003F$OBJF
-#[1] -29.98403
+run007F$OBJF-run003F$OBJF
+#[1] -29.625
 
 #################################################################################
 ##                                                                             ##
@@ -250,5 +250,6 @@ run007FF$OBJF-run003F$OBJF
 #################################################################################
 ##                                                                             ##
 #################################################################################
+
 
 
