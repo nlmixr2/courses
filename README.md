@@ -12,3 +12,10 @@ So far it includes -
 
 * **PssN 2023** in Nasarawa, Nigeria on 10 July 2023
 
+* **SUP 2024** in Uppsala, Sweden on 12 April 2024
+
+* **PAGE 2024** in Rome, Italy on 25 June 2024
+
+* **PopSim 2024** in Copenhagen, Denmark on 27 September 2024
+
+* **NURD Course** in Nijmegen, Netherlands at the Radboud UMC on 24 October 2024
