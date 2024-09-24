@@ -197,8 +197,8 @@ One.comp.transit.allo <- function() {
   })
   model({
     #Allometric scaling on weight
-    cl <- exp(lcl + eta.cl + ALLC * log(WT)/70)
-    v  <- exp(lv + eta.v + ALLV * log(WT)/70)
+    cl <- exp(lcl + eta.cl + ALLC * log(WT/70))
+    v  <- exp(lv + eta.v + ALLV * log(WT/70))
     ktr <- exp(lktr + eta.ktr)
     # RxODE-style differential equations are supported
     d/dt(depot)   = -ktr * depot
@@ -225,7 +225,7 @@ save(run007F, file = "run007F.Rdata")
 ## do you get a significant drop in OFV by including allometric weight?
 load(file="run003F.Rdata")
 run007F$OBJF-run003F$OBJF
-#[1] -29.625
+#[1] -25.67259
 
 #################################################################################
 ##                                                                             ##
