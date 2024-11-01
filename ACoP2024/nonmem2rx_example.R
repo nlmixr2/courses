@@ -1,8 +1,20 @@
 # Install required packages (only once) ----
 
-install.packages("nlmixr2", dependencies = TRUE)
-install.packages(c("nonmem2rx", "monolix2rx", "babelmixr2"))
+installFromCran <- FALSE
+installFromGitHub <- FALSE
 
+if (installFromCran) {
+  install.packages("nlmixr2", dependencies = TRUE)
+  install.packages(c("nonmem2rx", "monolix2rx", "babelmixr2"))
+} else if (installFromGitHub) {
+  remotes::install_github(
+    paste0(
+      "nlmixr2/",
+      c("rxode2", "nlmixr2est", "nlmixr2", "monolix2rx", "nonmem2rx", "babelmixr2")
+    ),
+    force = TRUE
+  )
+}
 # Load and examine a typical NONMEM population pharmacokinetic model ----
 
 ## Load required packages ----
@@ -60,4 +72,6 @@ modUpdatedNames
 
 # Convert NONMEM fit to nlmixr2 fit object (does not re-estimate)
 
-as.nlmixr2(modUpdatedNames)
+nlmixrFitMod <- as.nlmixr2(modUpdatedNames)
+
+nlmixrFitMod
