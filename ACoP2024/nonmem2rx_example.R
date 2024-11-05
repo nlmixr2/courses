@@ -47,7 +47,12 @@ modOrigNames
 
 plot(modOrigNames)
 
-## Or, you can load the model translating the parameter names to easier-to-read names when loading. ----
+## You can also plot the differences between model prediction by
+## subject (on log scale) ----
+plot(modOrigNames, page=1, log="y") # page=TRUE shows all subjects
+
+## Or, you can load the model translating the parameter names to
+## easier-to-read names when loading. ----
 
 modCleanNames <-
   nonmem2rx(
@@ -75,3 +80,28 @@ modUpdatedNames
 nlmixrFitMod <- as.nlmixr2(modUpdatedNames)
 
 nlmixrFitMod
+
+
+# Sometimes models are not read with the translated residual error
+# (NONMEM only, not monolix2rx).  This can be situation can be
+# produced manually by using the option `determineError=FALSE`:
+
+modCleanNamesNoError <-
+  nonmem2rx(
+    resFileName, save = FALSE,
+    thetaNames = c("lcl", "lvc", "lq", "lvp", "prop.sd"),
+    etaNames = c("eta.cl", "eta.vc", "eta.q","eta.vp"),
+    cmtNames = c("central", "perip"),
+    determineError=FALSE)
+
+# In this case you might want to copy the model and manually modify
+# the residual error.  You would get the original model, which we are
+# changing into a function to simulate the process:
+f <- as.function(modCleanNames)
+
+# Once you make the changes you can then convert back by using `as.nonmem2rx()`
+f <- as.nonmem2rx(f, modCleanNamesNoError)
+
+# This re-runs the model validation so you know that even though you
+# changed the model you can convert this to a nlmixr2 fit with
+# confidence that you expressing the model correctly.
