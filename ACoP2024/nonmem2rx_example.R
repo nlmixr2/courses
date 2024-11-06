@@ -105,3 +105,9 @@ f <- as.nonmem2rx(f, modCleanNamesNoError)
 # This re-runs the model validation so you know that even though you
 # changed the model you can convert this to a nlmixr2 fit with
 # confidence that you expressing the model correctly.
+
+
+# Not that once this is in an appropriate format you can use the data to
+# re-estimate (or estimate using new data) in `nlmixr2` if you wish:
+# (unlike as.nlmixr2 this performs an estimation)
+fit <- nlmixr2(f, modCleanNamesNoError$nonmemData, "focei")
