@@ -4,6 +4,18 @@ This repository contains the source code for nlmixr2-related courses and worksho
 
 So far it includes -
 
+* **ACoP 2024** in Phoenix, Arizona on 11 November 2024
+
+* **NURD 2024** in Nijmegen, The Netherlands
+
+* **Uppsala 2024** In Uppsala, Sweeden
+
+* **PAGE 2024** in Rome, Italy
+
+* **PssN 2023** Hybrid Nasarawa, Nigeria, 2023
+
+* **PopSim 2023** in Copenhagen 2023
+
 * **ACoP 2022** in Aurora, Colorado on 3 November 2022
 
 * **PAGE 2022** in Ljubljana, Slovenia on 28 June 2022
