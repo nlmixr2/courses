@@ -1,0 +1,391 @@
+---
+title: |
+  | Design evaluation and optimization with PopED, babelmixr2 and nlmixr2  
+  | Hands-on 3
+
+subtitle: "ACoP15 2024 - Using Past Models to Bridge to Open Models and Open Science Using nlmixr2"
+author:
+- Theodoros (Theo) Papathanasiou
+- Matt Fidler
+- On behalf of the nlmixr2 development team
+
+date: "14 November 2024"
+output:
+  html_document: 
+    df_print: kable
+    fig_caption: yes
+    fig_height: 6.72
+    fig_width: 9.4
+    theme: readable
+    toc: yes
+    toc_depth: 5
+    toc_float: true
+    number_sections: false
+    code_folding: show
+editor_options: 
+  markdown: 
+    wrap: sentence
+  chunk_output_type: console
+  
+---
+
+```{r, initial-setup, echo=FALSE}
+# knitr::opts_knit$set(verbose=T)
+knitr::opts_chunk$set(
+  cache = TRUE
+  # dev = c("png")
+)
+options(knitr.kable.NA = "")
+
+```
+
+```{r babelmixr2-logo, include=T, fig.width=1, fig.height=10, eval=TRUE, echo=FALSE}
+htmltools::img(src = 'https://blog.nlmixr2.org/blog/2024-11-06-poped/featured.png', 
+               alt = 'logo', 
+               style = 'position:fixed; top:0; right:0; padding:10px; width:200px;')
+
+```
+
+# Overview
+
+This tutorial was based on the PopED examples that were previously created by Martin Fink, Giulia Lestini, and Andrew Hooker. All classical PopED examples can be found under the standard PopED installation folder, or by following the file path obtained by the command: system.file("examples", package="PopED").
+
+Below, we provide links to the PopED software website, the babelmixr2 and PopED blog post.
+
+**PopED** <https://andrewhooker.github.io/PopED/>
+**babelmixr2 and PopED blog** <https://blog.nlmixr2.org/blog/2024-11-06-poped/>
+
+
+```{r Knitr setup, cache=TRUE, echo = FALSE, message = FALSE, warning = FALSE, results='hide'}
+
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, fig.width = 9.4, fig.height = 6.72)
+
+```
+
+```{r File Setup, echo = FALSE, message = FALSE, warning = FALSE, results='hide'}
+# # Load libraries
+library(PopED)
+library(babelmixr2)
+library(tidyverse)
+library(deSolve)
+
+run.estimation = F
+
+```
+
+# TMDD Example
+
+## Classical PopED implementation
+
+When working with PopED, the user is expected to define three user defined functions. These are:
+ - ff_fun: Function describing the structural model. e.g. ff.PK.1.comp.oral.md.KE.
+ - fg_fun: Function describing the parameter model. e.g. parameter.model.
+ - fError_fun: Function describing the residual error model. e.g. feps.prop.
+
+Below, we define the three user functions for a PK problem with an analytical solution:
+The problem we are working with, is PK exercise, with target mediated drug disposition kinetics
+
+### Structural model function
+
+```{r, echo=TRUE}
+
+tmdd_qss_one_target_model_ode <- function(Time,State,Pars){
+  with(as.list(c(State, Pars)), {   
+    RTOT = A4
+    CTOT= A2/V1
+    CFREE = 0.5*((CTOT-RTOT-KSSS)+sqrt((CTOT-RTOT-KSSS)^2+4*KSSS*CTOT))
+    
+    dA1 = -KA*A1
+    dA2 = FAVAIL*KA*A1+(Q/V2)*A3-(CL/V1+Q/V1)*CFREE*V1-RTOT*KINT*CFREE*V1/(KSSS+CFREE)  
+    dA3 = (Q/V1)*CFREE*V1 - (Q/V2)*A3
+    dA4 = R0*KDEG - KDEG*RTOT - (KINT-KDEG)*(RTOT*CFREE/(KSSS+CFREE))
+    
+    return(list(c(dA1,dA2,dA3,dA4)))  
+  })
+}
+
+tmdd_qss_one_target_model <- function(model_switch,xt,parameters,poped.db){
+  with(as.list(parameters),{
+    y=xt
+    
+    #The initialization vector for the compartment 
+    A_ini <- c(A1=DOSE*SC_FLAG,
+               A2=DOSE*(1-SC_FLAG),
+               A3=0,
+               A4=R0)
+    
+    #Set up time points for the ODE
+    times_xt <- drop(xt)
+    times <- sort(times_xt) 
+    times <- c(0,times) ## add extra time for start of integration
+    
+    # solve the ODE
+    out <- ode(A_ini, times, tmdd_qss_one_target_model_ode, parameters)#,atol=1e-13,rtol=1e-13)
+    
+    
+    # extract the time points of the observations
+    out = out[match(times_xt,out[,"time"]),]
+    
+    # Match ODE output to measurements
+    RTOT = out[,"A4"]
+    CTOT = out[,"A2"]/V1
+    CFREE = 0.5*((CTOT-RTOT-KSSS)+sqrt((CTOT-RTOT-KSSS)^2+4*KSSS*CTOT))
+    COMPLEX=((RTOT*CFREE)/(KSSS+CFREE))
+    RFREE= RTOT-COMPLEX
+    
+    y[model_switch==1]= RTOT[model_switch==1]
+    y[model_switch==2] =CFREE[model_switch==2]
+    #y[model_switch==3]=RFREE[model_switch==3]
+    
+    return(list( y=y,poped.db=poped.db))
+  })
+}
+
+```
+
+### Parameter function
+
+```{r, echo=TRUE}
+# parameter definition function 
+# names match parameters in function ff
+# PopED expects the bpop[] notation for fixed effects, the b[] notation for random effects and the a[] notation for any parameter that we are interested to evaluate or optimize over.
+## -- parameter definition function 
+sfg <- function(x,a,bpop,b,bocc){
+  parameters=c( CL=bpop[1]*exp(b[1]),
+                V1=bpop[2]*exp(b[2]),
+                Q=bpop[3]*exp(b[3]),
+                V2=bpop[4]*exp(b[4]),
+                FAVAIL=bpop[5]*exp(b[5]),
+                KA=bpop[6]*exp(b[6]),                       
+                VMAX=bpop[7]*exp(b[7]),
+                KMSS=bpop[8]*exp(b[8]),
+                R0=bpop[9]*exp(b[9]),
+                KSSS=bpop[10]*exp(b[10]),
+                KDEG=bpop[11]*exp(b[11]),
+                KINT=bpop[12]*exp(b[12]),
+                DOSE=a[1],
+                SC_FLAG=a[2])
+  return(parameters) 
+}
+```
+
+### Residual unexplained variablity (RUV) function
+
+```{r, echo=TRUE}
+# Residual unexplained variability (RUV) function
+
+tmdd_qss_one_target_model_ruv <- function(model_switch,xt,parameters,epsi,poped.db){
+  returnArgs <- do.call(poped.db$model$ff_pointer,list(model_switch,xt,parameters,poped.db)) 
+  y <- returnArgs[[1]]
+  poped.db <- returnArgs[[2]]
+  
+  y[model_switch==1] = log(y[model_switch==1])+epsi[,1]
+  y[model_switch==2] = log(y[model_switch==2])+epsi[,2]
+
+  return(list(y=y,poped.db=poped.db)) 
+}
+
+```
+
+### Design and design space definition
+
+```{r, echo=TRUE}
+# for study 1 in gibiansky,JPKPD,2012 table 2 
+poped.db.1 <- create.poped.database(
+      # Definition of the user defined functions
+      ff_fun=tmdd_qss_one_target_model,
+      fError_fun=tmdd_qss_one_target_model_ruv,
+      fg_fun=sfg,
+      
+      # Definition of the design group number, and the number or subjects per group
+      groupsize=6,
+      m=4,      #number of groups
+
+      # Definition of the fixed effect, random effects and error parameters, 
+      # and if they are fixed or not
+      sigma=c(0.04,0.0225), 
+      bpop=c(CL=0.3,V1=3,Q=0.2,V2=3,FAVAIL=0.7,KA=0.5,VMAX=0,
+           KMSS=0,R0=0.1,KSSS=0.015,KDEG=10,KINT=0.05),
+      d=c(CL=0.09,V1=0.09,Q=0.04,V2=0.04,FAVAIL=0.04,KA=0.16,VMAX=0,
+        KMSS=0,R0=0.09,KSSS=0.09,KDEG=0.04,KINT=0.04), 
+      notfixed_bpop=c( 1,1,1,1,1,1,0,0,1,1,1,1),
+      notfixed_d=c( 1,1,1,1,1,1,0,0,1,1,1,1),
+      
+      # Definition of the design space
+      xt=c(0.0417,0.25,0.5,1,3,7,14,21,28,35,42,49,56,
+         0.0417,0.25,0.5,1,3,7,14,21,28,35,42,49,56),
+      model_switch=c(1,1,1,1,1,1,1,1,1,1,1,1,1,
+                   2,2,2,2,2,2,2,2,2,2,2,2,2),
+      bUseGrouped_xt=1,
+      G_xt=c(1,2,3,4,5,6,7,8,9,10,11,12,13,
+           1,2,3,4,5,6,7,8,9,10,11,12,13),
+      a=list(c(DOSE=100, SC_FLAG=0),
+           c(DOSE=300, SC_FLAG=0),
+           c(DOSE=600, SC_FLAG=0),
+           c(DOSE=1000, SC_FLAG=1)),
+      discrete_a = list(DOSE=seq(100,1000,by=100),
+                      SC_FLAG=c(0,1)))
+
+```
+
+It is always helpful to plot out the design and the predictions that were defined for the construction of th PopED database. Thankfully, PopED has some readily available functions to aid with plotting
+
+### Plot model predictions
+```{r}
+plot_model_prediction(poped.db.1,facet_scales="free")
+```
+
+What we want to do next, is a design evaluation to see what kind of information content we can expect from the design that we defined empirically.
+
+### Design evaluation
+
+```{r}
+tic(); eval <- evaluate_design(poped.db.1); toc()
+
+eval$rse
+```
+
+We can see that most of the parameters are expected to be estimated with good certainty, apart from most of the IIV estimates.
+
+## babelmixr2/poped implementation
+
+In this example, we demonstrate the general principles of the babelmixr2/poped user interface. Additional examples can be found in the examples folder, or following the link: https://github.com/nlmixr2/babelmixr2/tree/main/inst/poped
+
+### nlmimxr2 model definition
+
+The babelmixr2/poped user interface makes full use of the nlmixr2 model language definition. The user simply needs to write the model in nlmixr2 language (or use nonmem2rx or monolix2rx if translating from NONMEM or Monolix, respectively). This provides a user friendly interface, and removes part of the burden of learning the classical PopED way of model definitions.
+
+In this example, we present an ODE system for a compound that follows target mediated target disposition kinetics.
+
+```{r}
+f <- function() {
+  ini({
+    tCl     <- 0.3
+    tVc     <- 3
+    tQ      <- 0.2
+    tVp     <- 3
+    tFavail <- 0.7
+    tKa     <- 0.5
+    tVmax   <- fix(0)
+    tKmss   <- fix(0)
+    tR0     <- 0.1
+    tKsss   <- 0.015
+    tKdeg   <- 10
+    tKint   <- 0.05
+
+    eta.cl     ~ 0.09
+    eta.vc     ~ 0.09
+    eta.q      ~ 0.04
+    eta.vp     ~ 0.04
+    eta.favail ~ 0.04
+    eta.ka     ~ 0.16
+    eta.vmax   ~ fix(0)
+    eta.kmss   ~ fix(0)
+    eta.r0     ~ 0.09
+    eta.ksss   ~ 0.09
+    eta.kdeg   ~ 0.04
+    eta.kint   ~ 0.04
+
+    rtot.sd <- sqrt(0.04)
+    free.sd <- sqrt(0.0225)
+  })
+  model({
+    Cl     <- tCl     * exp(eta.cl)
+    Vc     <- tVc     * exp(eta.vc)
+    Q      <- tQ      * exp(eta.q)
+    Vp     <- tVp     * exp(eta.vp)
+    Favail <- tFavail * exp(eta.favail)
+    Ka     <- tKa     * exp(eta.ka)
+    Vmax   <- tVmax   * exp(eta.vmax)
+    Kmss   <- tKmss   * exp(eta.kmss)
+    R0     <- tR0     * exp(eta.r0)
+    Ksss   <- tKsss   * exp(eta.ksss)
+    Kdeg   <- tKdeg   * exp(eta.kdeg)
+    Kint   <- tKint   * exp(eta.kint)
+
+    Ctot          <- central/Vc
+    Cfree         <- 0.5*((Ctot-Rtot-Ksss)+sqrt((Ctot-Rtot-Ksss)^2+4*Ksss*Ctot))
+    depot(0)      <- DOSE*SC_FLAG
+    d/dt(depot)   <- -Ka*depot
+    central(0)    <- DOSE*(1-SC_FLAG)
+    d/dt(central) <- Ka*depot*Favail + (Q/Vp)*periph - (Cl/Vc+Q/Vc)*Cfree*Vc -
+      Rtot*Kint*Cfree*Vc/(Ksss+Cfree)
+    d/dt(periph)  <- (Q/Vc)*Cfree*Vc - (Q/Vp)*periph
+    Rtot(0)       <- R0
+    d/dt(Rtot)    <- R0*Kdeg - Kdeg*Rtot - (Kint-Kdeg)*(Rtot*Cfree/(Ksss+Cfree))
+
+    Rtot         ~  lnorm(rtot.sd)
+    Cfree        ~  lnorm(free.sd)
+  })
+}
+
+```
+
+### Event table definition
+
+This is one point where the babelmixr2/PopED workflow diverges from the classical PopED workflow. Here, the user provides a rxode2 style event table for the observation times. this event table is essentially defining the minimal design that we will be exploring in the example.
+
+```{r}
+
+e1 <- et(c(0.0417,0.25,0.5,1,3,7,14,21,28,35,42,49,56)) %>%
+  as.data.frame() %>% dplyr::mutate(dvid=1)
+
+e2 <- e1
+e2$dvid <- 2
+
+e0 <- rbind(e1, e2) %>%
+  dplyr::mutate(ID=1)
+
+e1 <- et(c(0.0417,1,1,7,14,21,28,56,63,70,77,84,91,98,105)) %>%
+  as.data.frame() %>% dplyr::mutate(dvid=1)
+
+e2 <- e1
+e2$dvid <- 2
+
+e <- rbind(e1, e2) %>%
+  dplyr::mutate(ID=2)
+
+e <- rbind(e0, e)
+
+e %>% knitr::kable()
+```
+
+### babelmixr2/poped database
+
+The final step is to create a PopED style database. This is done via the nlmixr2() function, together with the "poped" argument. This function call is equivalent to create.poped.database() from the classical PopED workflow.
+Notice that many of the design definition options defined within popedControl(), are similar to the ones showing in the classical PopED workflow.
+
+```{r}
+db.1 <- nlmixr2(f, e, "poped",
+              control=popedControl(
+                    groupsize=6,
+                    a=list(c(ID=1, DOSE=100, SC_FLAG=0),
+                           c(ID=1, DOSE=300, SC_FLAG=0),
+                           c(ID=1, DOSE=600, SC_FLAG=0),
+                           c(ID=1, DOSE=1000, SC_FLAG=1)),
+                    discrete_a = list(DOSE=seq(100,1000,by=100),
+                                      SC_FLAG=c(0,1)),
+              ))
+
+```
+
+### Plot model prediction
+
+The plot_model_prediction function from PopED work seamlessly with the babelmixr2/PopED database
+
+```{r}
+plot_model_prediction(db.1,facet_scales="free")
+```
+
+## Design evaluation
+
+The design evaluation function from PopED works seamlessly with the babelmixr2/PopED database. Notice that we are receiving the same results as in the classical PopED workflow.
+
+```{r}
+tic(); eval <- evaluate_design(db.1); toc()
+eval$rse
+```
+
+<br> \
+***End of Hand-on 3 -  Design evaluation and optimization with PopED, babelmixr2 and nlmixr2 ACoP15 2024*** 
+<br>

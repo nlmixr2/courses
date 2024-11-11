@@ -1,0 +1,81 @@
+<DATAFILE>
+
+[FILEINFO]
+file='dapto_data_acop.csv'
+delimiter = comma
+header={ID, TIME, EVID, AMT, DUR, DV, SEX, WT, TEMP, ClCr}
+
+[CONTENT]
+ID = {use=identifier}
+TIME = {use=time}
+EVID = {use=eventidentifier}
+AMT = {use=amount}
+DV = {use=observation, type=continuous}
+SEX = {use=covariate, type=categorical}
+WT = {use=covariate, type=continuous}
+ClCr = {use=covariate, type=continuous}
+
+[SETTINGS]
+dataType = {'DV'=plasma}
+
+<MODEL>
+
+[COVARIATE]
+input = {ClCr, WT, SEX}
+
+SEX = {type=categorical, categories={'0', '1'}}
+
+EQUATION:
+logtClCr = log(ClCr/37.7806)
+logtWT = log(WT/69.7821)
+
+[INDIVIDUAL]
+input = {Cl_pop, omega_Cl, Q_pop, omega_Q, V1_pop, omega_V1, V2_pop, omega_V2, SEX, beta_Cl_SEX_1, logtClCr, beta_Cl_logtClCr, logtWT, beta_V2_logtWT}
+
+SEX = {type=categorical, categories={'0', '1'}}
+
+DEFINITION:
+Cl = {distribution=logNormal, typical=Cl_pop, covariate={SEX, logtClCr}, coefficient={{0, beta_Cl_SEX_1}, beta_Cl_logtClCr}, sd=omega_Cl}
+Q = {distribution=logNormal, typical=Q_pop, sd=omega_Q}
+V1 = {distribution=logNormal, typical=V1_pop, sd=omega_V1}
+V2 = {distribution=logNormal, typical=V2_pop, covariate=logtWT, coefficient=beta_V2_logtWT, sd=omega_V2}
+
+[LONGITUDINAL]
+input = {a}
+
+file = 'bicompartment.txt'
+
+DEFINITION:
+DV = {distribution=normal, prediction=Cc, errorModel=constant(a)}
+
+<FIT>
+data = 'DV'
+model = DV
+
+<PARAMETER>
+Cl_pop = {value=0.6492867, method=MLE}
+Q_pop = {value=3.3651743, method=MLE}
+V1_pop = {value=5.0811849, method=MLE}
+V2_pop = {value=5.0378997, method=MLE}
+a = {value=1, method=MLE}
+beta_Cl_SEX_1 = {value=-0.2811175, method=MLE}
+beta_Cl_logtClCr = {value=0.2747258, method=MLE}
+beta_V2_logtWT = {value=1.3370919, method=MLE}
+omega_Cl = {value=1, method=MLE}
+omega_Q = {value=1, method=MLE}
+omega_V1 = {value=1, method=MLE}
+omega_V2 = {value=1, method=MLE}
+
+<MONOLIX>
+
+[TASKS]
+populationParameters()
+individualParameters(method = {conditionalMean, conditionalMode })
+fim(method = StochasticApproximation)
+logLikelihood(method = ImportanceSampling)
+plotResult(method = {indfits, parameterdistribution, covariancemodeldiagnosis, covariatemodeldiagnosis, obspred, vpc, residualsscatter, residualsdistribution, randomeffects, saemresults })
+
+[SETTINGS]
+GLOBAL:
+exportpath = 'daptomycin'
+
