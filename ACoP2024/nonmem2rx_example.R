@@ -111,3 +111,6 @@ f <- as.nonmem2rx(f, modCleanNamesNoError)
 # re-estimate (or estimate using new data) in `nlmixr2` if you wish:
 # (unlike as.nlmixr2 this performs an estimation)
 fit <- nlmixr2(f, modCleanNamesNoError$nonmemData, "focei")
+
+# You can also call estimation methods "nonmem" or "monolix" instead
+# of "focei" to translate models between different formats.
