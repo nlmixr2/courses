@@ -26,6 +26,9 @@ PKdata <- fread("warfarin_PKS.csv")
 ## Or for generating exposure estimates with a particularly nasty model that you 
 ##  do not want to refit on new data :-)
 
+#Update slides with this syntax:
+#run002F$ui
+
 KA1tr5posthoc <- function() {
   ini({
     # Where initial conditions/variables are specified

@@ -24,7 +24,7 @@ modKA1 <- rxode2(model = odeKA1)
 
 ## provide the parameter values to be simulated:
 Params <- c(
- ka = log(2) / 0.5, # 1/h (aborption half-life of 30 minutes)
+ ka = log(2) / 0.5, # 1/h (absorption half-life of 30 minutes)
  cl = 0.135,        # L/h
  v = 8              # L
 )
@@ -40,7 +40,7 @@ ev$add.sampling(seq(0, 120, 0.1))
 
 ## Then solve the system
 ##
-## The output from rxSolve is a solved rxode2E object,
+## The output from rxSolve is a solved rxode2 object,
 ##  but by making it a data.frame only the simulated values are kept:
 Res<-data.frame(rxSolve(modKA1,Params,ev))
 #Alternative code:
@@ -65,6 +65,17 @@ ev$add.dosing(
   rate = 125,           #mg/h; infuse at a rate of 125 mg/h, resulting in 2-hour infusions
   start.time = 36       #h; have the three doses start at 36h
 )
+
+# #Alternatively:
+# ev$add.dosing(
+#   dose = 250,           #mg
+#   nbr.doses = 3,        #add three doses
+#   dosing.to = 'central',        #add them to the second ODE in the model (=central)
+#   dosing.interval = 12, #h; set the doses 12 hours apart
+#   rate = 125,           #mg/h; infuse at a rate of 125 mg/h, resulting in 2-hour infusions
+#   start.time = 36       #h; have the three doses start at 36h
+# )
+
 
 Res<-data.frame(rxSolve(modKA1,Params,ev))
 
@@ -166,6 +177,7 @@ evNM[,rate:=ifelse(time==36,amt/2,NA)]
 evNM[,ii:=ifelse(time==36,12,NA)]
 evNM[,addl:=ifelse(time==36,2,NA)]
 
+evNM[time==36]
 Res2NM<-data.frame(rxSolve(modKA1trans,Params2,evNM))
 
 ## Examine the results:

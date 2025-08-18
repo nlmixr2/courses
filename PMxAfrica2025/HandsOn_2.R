@@ -221,7 +221,11 @@ ctr001S %>% pmx_plot_eta_matrix
 ## Instead of using ggPMX, an alternative is to use the new xpose package for which xpose.nlmixr2 provides the link
 ## the nlmix2 object can be transformed into an xpose object to allow diagnostics with the new xpose package
 ## the link between nlmixr2 and xpose is provided by the xpose.nlmixr2 package
-## only xpose_data_nlmixr is from xpose.nlmixr, all further commands are from the xpose package
+## only xpose_data_nlmixr is from xpose.nlmixr2, all further commands are from the xpose package
+
+#Not necessary with the latest version of nlmixr2 (version 4) but added here for safety
+library(xpose.nlmixr2)
+
 xpdb.1s <- xpose_data_nlmixr(run001S)
 
 ## this can also be used to generate trace plots (parameters vs iterations:)
@@ -448,7 +452,7 @@ ctr2 <- pmx_nlmixr(run002F, conts = c("WT","AGE"),cats=c("SEX","SPARSE"), vpc=FA
 ctr2 %>% pmx_plot_npde_pred
 ctr2 %>% pmx_plot_npd_pred
 ctr2 %>% pmx_plot_cwres_pred
-
+ctr2 %>% pmx_plot_eta_conts
 
 
 #################################################################################
