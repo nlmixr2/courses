@@ -26,44 +26,42 @@ PKdata <- fread("warfarin_PKS.csv")
 ## Or for generating exposure estimates with a particularly nasty model that you 
 ##  do not want to refit on new data :-)
 
-#Update slides with this syntax:
-#run002F$ui
 
-KA1tr5posthoc <- function() {
-  ini({
-    # Where initial conditions/variables are specified
-    lktr <-  1.18994619   #log ktr (/h)
-    lcl  <- -2.01737477   #log Cl (L/h)
-    lv   <-  2.06631620   #log V (L)
-    prop.err <- 0.07883633#proportional error (SD/mean)
-    add.err <- 0.37249666 #additive error (mg/L)
-    eta.ktr ~ 0.2532964   #IIV ktr
-    eta.cl ~ 0.08073339   #IIV Cl
-    eta.v ~ 0.04490733   #IIV V
-  })
-  model({
-    # Where the model is specified
-    # The model uses the ini-defined variable names
-    cl  <- exp(lcl + eta.cl)
-    v   <- exp(lv + eta.v)
-    ktr <- exp(lktr + eta.ktr)
-    # RxODE-style differential equations are supported
-    d/dt(trns1) = -ktr * trns1
-    d/dt(trns2) =  ktr * trns1 - ktr * trns2
-    d/dt(trns3) =  ktr * trns2 - ktr * trns3
-    d/dt(trns4) =  ktr * trns3 - ktr * trns4
-    d/dt(trns5) =  ktr * trns4 - ktr * trns5
-    d/dt(central) =  ktr * trns5 - (cl/v) * central
-    ## Concentration is calculated
-    cp = central/v
-    # And is assumed to follow proportional and additive error
-    cp ~ prop(prop.err) + add(add.err)
+
+KA1tr5posthoc <- function() {  
+  ini({    
+    # Specify previously obtained population estimates (e.g. from NONMEM or nlmixr)    
+    lktr <-  1.3707    #log ktr (/h)    
+    lcl  <- -2.0372    #log Cl (L/h)    
+    lv   <-  2.0792    #log V (L)    
+    prop.err <- 0.075870 #proportional error (SD/mean)    
+    add.err <- 0.36131   #additive error (mg/L)    
+    eta.ktr ~ 0.24961    
+    eta.cl ~ 0.087147    
+    eta.v ~ 0.051198  
+  })  model({    
+    cl  <- exp(lcl + eta.cl)    
+    v   <- exp(lv + eta.v)    
+    ktr <- exp(lktr + eta.ktr)        
+    d/dt(trns1) = -ktr * trns1    
+    d/dt(trns2) =  ktr * trns1 - ktr * trns2    
+    d/dt(trns3) =  ktr * trns2 - ktr * trns3    
+    d/dt(trns4) =  ktr * trns3 - ktr * trns4    
+    d/dt(trns5) =  ktr * trns4 - ktr * trns5    
+    d/dt(central) =  ktr * trns5 - (cl/v) * central    
+    cp = central/v    
+    cp ~ prop(prop.err) + add(add.err)  
   })
 }
 
 ## specify posthoc as estimation method to only generate EBEs and not do any estimation
 
 run005ph <- nlmixr2(KA1tr5posthoc, PKdata, est = "posthoc")
+
+#Or reuse the previous model result with an updated estimation method
+load(file="run004F.Rdata")
+run005ph <- nlmixr2(run004F$ui, PKdata, est = "posthoc")
+
 
 ##Generate individual smooth profiles using augPred
 indivpk2 <- augPred(run005ph)
