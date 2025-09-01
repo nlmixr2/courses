@@ -1,0 +1,23 @@
+DESCRIPTION:
+The administration is via an infusion (requires INFUSION RATE or INFUSION DURATION column-type in the data set).
+The PK model has a central compartment (volume V1), a peripheral compartment (volume V2, intercompartmental clearance Q), and a linear elimination (clearance Cl).
+
+[LONGITUDINAL]
+input = {Cl, V1, Q, V2}
+
+PK:
+
+TVCL = Cl
+TVV1 = V1
+TVV2 = V2
+TVQ  = Q
+
+; Parameter transformations
+k12 = TVQ/TVV1
+k21 = TVQ/TVV2
+
+; PK model definition
+Cc = pkmodel(V=TVV1, Cl=TVCL, k12, k21)
+
+OUTPUT:
+output = {Cc}

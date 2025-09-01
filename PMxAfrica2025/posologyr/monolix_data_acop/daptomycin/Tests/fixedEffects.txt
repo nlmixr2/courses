@@ -1,0 +1,4 @@
+parameter,statistics(sa),p-value(sa)
+beta_Cl_logtClCr,8.23119,2.22e-16
+beta_Cl_SEX_1,3.51762,0.000435
+beta_V2_logtWT,8.52216,<2.2e-16
