@@ -1,0 +1,49 @@
+$PROB  BRV Adult popPK model ; run025 analysis simulated data
+
+$DATA DAT_A.csv IGNORE=@ 
+$INPUT ID RND OCC TIME MDV AMT SS II DV WT AED
+
+$SUB ADVAN2
+$PK
+
+;Allometrically scaled to 70kg WT patient
+TVCL   = THETA(2)
+TVVC   = THETA(3)
+TVKA   = THETA(4)
+ALLOCL = THETA(5)
+ALLOVC = THETA(6)
+AEDCL  = THETA(7)
+
+CL    = EXP(LOG(TVCL) + ALLOCL*(LOG(WT/70)) + AEDCL*AED + ETA(1)) ;Clearance (L/hr)
+VC    = EXP(LOG(TVVC) + ALLOVC*(LOG(WT/70)) + ETA(2)) ;Volume (L)
+KA    = EXP(LOG(TVKA) + ETA(3)) ;Ka (1/hr) 
+
+S2    = VC
+K     = CL/VC
+
+$ERROR
+IPRED = F      
+RESCV = THETA(1)
+IRES  = DV-IPRED
+W     = IPRED*RESCV
+IWRES = (DV-IPRED)/W 
+Y     = IPRED+W*EPS(1)
+
+$THETA  (0.001,0.22);Res.error (SD/mean) 
+$THETA  (0.001,3.7) ;CL (L/hr)
+$THETA  (0.01,50)   ;V (L)
+$THETA  (0.01,1.5)  ;Ka (1/hr)
+$THETA  0.75 FIX    ;WT on Cl
+$THETA  1    FIX    ;WT on V
+$THETA  0.2         ;AED effect on CL
+
+$OMEGA .1 .3 1.3
+
+$SIGMA 1 FIXED 
+
+$ESTIMATION PRINT=10 MAXEVAL=9999 NOABORT METHOD=1 
+            POSTHOC INTERACTION NOOBT 
+$COVARIANCE PRINT=E UNCONDITIONAL
+$TABLE 
+ ID RND WT AED CL VC KA
+ ONEHEADER NOPRINT NOAPPEND FIRSTONLY FILE=run025.csv
