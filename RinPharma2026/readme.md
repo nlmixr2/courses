@@ -13,5 +13,5 @@ listed below
 | Intro to lmixr2/rxode2 in pharmacometrics analyses| Anne Keunecke  | | 
 | Simulation in nlmixr2 ecosystem | Anne Keunecke | | 
 | Survival Analysis in nlmixr2 ecosystem  |   Justin Wilkins| | 
-| AI-assisted pharmacometric analysis | Mutaz Jaber | |  
+| [AI-assisted pharmacometric analysis](https://github.com/nlmixr2/AI-assisted-MIDD/blob/main/materials/rinpharma-nlmixr2-AI.pdf) | Mutaz Jaber | [AI-assisted-MIDD](https://github.com/nlmixr2/AI-assisted-MIDD/) |  
 | Future and closing remarks  New features and pre-releases | Matt Fidler| | 
