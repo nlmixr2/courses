@@ -1,4 +1,4 @@
-# R/Pharma workshop 2026
+** R/Pharma workshop 2026**
 
 This repository comprises the course material of the
 R/Pharma workshop 2026 held on 30th September 2026.
