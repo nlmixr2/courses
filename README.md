@@ -4,13 +4,19 @@ This repository contains the source code for nlmixr2-related courses and worksho
 
 So far it includes -
 
+* **R/Pharma 2026**  online, on  30 September 2026
+
+* **PAGE 2026** in Dubrovnik, Croatia on 2 June 2026
+
+* **SUP 2024** in Uppsala, Sweden on 12 April 2024
+
 * **ACoP 2024** in Phoenix, Arizona on 11 November 2024
 
 * **NURD 2024** in Nijmegen, The Netherlands
 
 * **Uppsala 2024** In Uppsala, Sweeden
 
-* **PAGE 2024** in Rome, Italy
+* **PAGE 2024** in Rome, Italy on 25 June 2024
 
 * **PssN 2023** Hybrid Nasarawa, Nigeria, 2023
 
@@ -24,9 +30,7 @@ So far it includes -
 
 * **PssN 2023** in Nasarawa, Nigeria on 10 July 2023
 
-* **SUP 2024** in Uppsala, Sweden on 12 April 2024
-
-* **PAGE 2024** in Rome, Italy on 25 June 2024
+* **PAGE 2026** in Dubrovnik, Croatia on 2 June 2026
 
 * **PopSim 2024** in Copenhagen, Denmark on 27 September 2024
 
