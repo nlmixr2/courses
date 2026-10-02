@@ -1,4 +1,4 @@
-# R/Pharma workshop 2026 https://rinpharma.com/
+# [R/Pharma](https://rinpharma.com/) workshop 2026 
 
 This repository comprises the course material of the
 R/Pharma workshop 2026 held on 30th September 2026.
@@ -10,8 +10,7 @@ listes below>
 | Topic | Presenter |  Material |
 | -------------------- |-------|-------------------|
 | Introduction | Matt Fidler | |  
-| Intro to lmixr2/rxode2 in pharmacometrics analyses| 
-Anne Keunecke  | | 
+| Intro to lmixr2/rxode2 in pharmacometrics analyses| Anne Keunecke  | | 
 | Simulationin nlmixr2 ecosystem | Anne Keunecke | | 
 | Survival Analysis in nlmixr2 ecosystem  |   Justin Wilkins| | 
 | AI-assisted pharmacometric analysis | Mutaz Jaber | |  
