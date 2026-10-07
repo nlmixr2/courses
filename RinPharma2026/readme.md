@@ -37,9 +37,15 @@ An overview on the content of this workshop and the material available is listed
       <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/models">Models</a></td>
     </tr>
     <tr>
-      <td>Simulation in nlmixr2 ecosystem</td>
-      <td>Anne Keunecke</td>
+      <td rowspan="2">Simulation in nlmixr2 ecosystem</td>
+     <td rowspan="2">Anne Keunecke</td>
       <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/003.simulation_workshop.pdf">Presentation: Simulations with nlmixr2</a></td>
+    </tr>
+     <tr>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/data">Data used</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/models">Models</a></td>
     </tr>
     <tr>
       <td>Survival Analysis in nlmixr2 ecosystem</td>
