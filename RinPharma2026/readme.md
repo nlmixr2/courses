@@ -20,8 +20,8 @@ An overview on the content of this workshop and the material available is listed
       <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/2026-nlmixr2-workshop.pdf">Presentation</a></td>
     </tr>
     <tr>
-      <td rowspan="3">Intro to nlmixr2/rxode2 in pharmacometrics analyses</td>
-      <td rowspan="3">Anne Keunecke</td>
+      <td rowspan="5">Intro to nlmixr2/rxode2 in pharmacometrics analyses</td>
+      <td rowspan="5">Anne Keunecke</td>
       <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/001_what%20is%20pharmacometric%20modelling.pdf">Presentation - what is PMX</a></td>
     </tr>
     <tr>
@@ -34,7 +34,7 @@ An overview on the content of this workshop and the material available is listed
       <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/data">Data used</a></td>
     </tr>
     <tr>
-      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/models">models</a></td>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/models">Models</a></td>
     </tr>
     <tr>
       <td>Simulation in nlmixr2 ecosystem</td>
