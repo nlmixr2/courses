@@ -1,10 +1,9 @@
 # [R/Pharma](https://rinpharma.com/) workshop 2026 
 
-This repository comprises the course material of the
+In this repository we collected all material presentate at the 
 R/Pharma workshop 2026 held on 30th September 2026.
 
-An overview on the topics discussed during the workshop and the respective material is
-listed below
+An overview on the content of this workshop and the material available is listed below:
 
 <table>
   <thead>
@@ -21,22 +20,43 @@ listed below
       <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/2026-nlmixr2-workshop.pdf">Presentation</a></td>
     </tr>
     <tr>
-      <td rowspan="2">Intro to nlmixr2/rxode2 in pharmacometrics analyses</td>
-      <td rowspan="2">Anne Keunecke</td>
+      <td rowspan="5">Intro to nlmixr2/rxode2 in pharmacometrics analyses</td>
+      <td rowspan="5">Anne Keunecke</td>
       <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/001_what%20is%20pharmacometric%20modelling.pdf">Presentation - what is PMX</a></td>
     </tr>
     <tr>
       <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/002_nlmixr2_development.pdf">Presentation: Model development</a></td>
     </tr>
     <tr>
-      <td>Simulation in nlmixr2 ecosystem</td>
-      <td>Anne Keunecke</td>
-      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/003.simulation_workshop.pdf">Presentation: Simulations with nlmixr2</a></td>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/handons">Handson</a></td>
     </tr>
     <tr>
-      <td>Survival Analysis in nlmixr2 ecosystem</td>
-      <td>Justin Wilkins</td>
-      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/nlmixr2_survival_260930.pdf">presentation</a></td>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/data">Data used</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/models">Models</a></td>
+    </tr>
+    <tr>
+      <td rowspan="4">Simulation in nlmixr2 ecosystem</td>
+     <td rowspan="4">Anne Keunecke</td>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/003.simulation_workshop.pdf">Presentation: Simulations with nlmixr2</a></td>
+    </tr>
+     <tr>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/handons">Handson</a></td>
+    </tr>
+     <tr>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/data">Data used</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/models">Models</a></td>
+    </tr>
+    <tr>
+        <td rowspan="2">Survival Analysis in nlmixr2 ecosystem</td>
+       <td rowspan="2">Justin Wilkins</td>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/nlmixr2_survival_260930.pdf">Presentation</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/survival">Handson survival</a></td>
     </tr>
     <tr>
       <td><a href="https://github.com/nlmixr2/AI-assisted-MIDD/blob/main/materials/rinpharma-nlmixr2-AI.pdf">AI-assisted pharmacometric analysis</a></td>
