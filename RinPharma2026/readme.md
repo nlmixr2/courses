@@ -1,3 +1,5 @@
+
+
 # [R/Pharma](https://rinpharma.com/) workshop 2026 
 
 This repository comprises the course material of the
@@ -10,8 +12,8 @@ listed below
 | Topic | Presenter |  Material |
 | -------------------- |-------|-------------------|
 | Introduction | Matt Fidler | [Presentation](https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/2026-nlmixr2-workshop.pdf)|  
-| Intro to nlmixr2/rxode2 in pharmacometrics analyses| Anne Keunecke  |[Presentation - what is PMX](https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/001_what%20is%20pharmacometrics.pdf) \
-[Presentation: Model development](https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/002_nlmixr2_development.pdf)| 
+| Intro to nlmixr2/rxode2 in pharmacometrics analyses| Anne Keunecke  |[Presentation - what is PMX](https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/001_what%20is%20pharmacometrics.pdf) |
+| Intro to nlmixr2/rxode2 in pharmacometrics analyses| Anne Keunecke  | [Presentation: Model development](https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/002_nlmixr2_development.pdf)| 
 
 | Simulation in nlmixr2 ecosystem | Anne Keunecke |[Presentation: Simulations with nlmixr2](https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/003.simulation_workshop.pdf) | 
 | Survival Analysis in nlmixr2 ecosystem  |   Justin Wilkins| [presentation](https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/nlmixr2_survival_260930.pdf) | 
