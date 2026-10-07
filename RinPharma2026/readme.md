@@ -42,6 +42,9 @@ An overview on the content of this workshop and the material available is listed
       <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/003.simulation_workshop.pdf">Presentation: Simulations with nlmixr2</a></td>
     </tr>
      <tr>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/handons">Handson</a></td>
+    </tr>
+     <tr>
       <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/data">Data used</a></td>
     </tr>
     <tr>
@@ -50,7 +53,7 @@ An overview on the content of this workshop and the material available is listed
     <tr>
         <td rowspan="2">Survival Analysis in nlmixr2 ecosystem</td>
        <td rowspan="2">Justin Wilkins</td>
-      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/nlmixr2_survival_260930.pdf">presentation</a></td>
+      <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/nlmixr2_survival_260930.pdf">Presentation</a></td>
     </tr>
     <tr>
       <td><a href="https://github.com/redprimel/courses/blob/RinPharma2026/RinPharma2026/survival">Handson survival</a></td>
