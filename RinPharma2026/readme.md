@@ -42,7 +42,7 @@ An overview on the content of this workshop and the material available is listed
       <td><a href="https://github.com/nlmixr2/courses/tree/main/RinPharma2026/003.simulation_workshop.pdf">Presentation: Simulations with nlmixr2</a></td>
     </tr>
      <tr>
-      <td><a href="https://github.com/nlmixr2/courses/tree/main/RinPharma2026/handons">Handson</a></td>
+      <td><a href="https://github.com/nlmixr2/courses/tree/main/RinPharma2026/handon">Handson</a></td>
     </tr>
      <tr>
       <td><a href="https://github.com/nlmixr2/courses/tree/main/RinPharma2026/data">Data used</a></td>
