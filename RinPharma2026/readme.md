@@ -22,7 +22,7 @@ An overview on the content of this workshop and the material available is listed
     <tr>
       <td rowspan="5">Intro to nlmixr2/rxode2 in pharmacometrics analyses</td>
       <td rowspan="5">Anne Keunecke</td>
-      <td><a href="https://github.com/nlmixr2/courses/tree/main/RinPharma2026/001_what%20is%20pharmacometric%20modelling.pdf">Presentation - what is PMX</a></td>
+      <td><a href="https://github.com/nlmixr2/courses/tree/main/RinPharma2026/001_what_is_pharmacometric_modelling.pdf">Presentation - what is PMX</a></td>
     </tr>
     <tr>
       <td><a href="https://github.com/nlmixr2/courses/tree/main/RinPharma2026/002_nlmixr2_development.pdf">Presentation: Model development</a></td>
